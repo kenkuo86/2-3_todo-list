@@ -41,6 +41,14 @@ app.get('/todos/new', (req,res) => {
   return res.render('new')
 })
 
+app.get('/todos/:id', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+          .lean()
+          .then( (todo) => res.render('detail', { todo } ))
+          .catch( (error) => console.log(error) )
+})
+
 app.post('/todos', (req,res) => {
   // 取得 post 過來的 todo 名稱
   const name = req.body.name
