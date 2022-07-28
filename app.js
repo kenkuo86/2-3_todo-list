@@ -30,6 +30,7 @@ app.set('view engine', 'hbs')
 // 設定 body-parser
 app.use(express.urlencoded({ extended: true }))
 
+// 取得首頁
 app.get('/', (req, res) => {
   Todo.find()
     .lean()
@@ -37,10 +38,12 @@ app.get('/', (req, res) => {
     .catch( error => console.log(error) )  
 })
 
+// 取得新增 todo 頁面
 app.get('/todos/new', (req,res) => {
   return res.render('new')
 })
 
+// 取得特定 todo detail 頁面
 app.get('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
@@ -49,6 +52,7 @@ app.get('/todos/:id', (req, res) => {
           .catch( (error) => console.log(error) )
 })
 
+// 送出新增 todo 請求
 app.post('/todos', (req,res) => {
   // 取得 post 過來的 todo 名稱
   const name = req.body.name
@@ -65,6 +69,7 @@ app.post('/todos', (req,res) => {
   //   .catch(error => console.log(error))
 })
 
+// 取得編輯 todo 頁面
 app.get('/todos/:id/edit', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
@@ -73,6 +78,7 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch((error) => console.log(error))
 })
 
+// 送出編輯 todo 請求
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
   const name = req.body.name
@@ -84,6 +90,16 @@ app.post('/todos/:id/edit', (req, res) => {
     })
     .then(() => {res.redirect(`/todos/${id}`)})
     .catch(error => console.log(error))
+})
+
+// 送出刪除 todo 請求
+app.post('/todos/:id/delete', (req,res) => {
+  const id = req.params.id
+
+  return Todo.findById(id)
+    .then( todo => todo.remove())
+    .then( () => res.redirect('/') )
+    .catch( error => console.log(error) )
 })
 
 app.listen(port, () => {
