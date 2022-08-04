@@ -3,6 +3,7 @@
 {{#each todos}}
   <ul>
     <li>
+      <input type="checkbox" name="isDone" {{#if this.isDone }} checked {{/if}} disabled>
       {{this.name}}
       {{!-- _id 是資料庫會自動新增的 id --}}
       <a href="./todos/{{this._id}}">Detail</a>

@@ -7,8 +7,9 @@ const todoSchema = new Schema({
     type: String,
     required: true
   },
-  done: {
-    type: Boolean
+  isDone: {
+    type: Boolean,
+    default: false
   }
 })
 
