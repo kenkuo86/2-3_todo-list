@@ -3,6 +3,7 @@ const app = express()
 // 引入 mongoose
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
+const methodOverride = require('method-override')
 
 const port = 3000
 
@@ -26,6 +27,9 @@ db.once('open', () => {
 // 設定 view engine
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: 'hbs' }))
 app.set('view engine', 'hbs')
+
+// 設定 method-override，滿足 RESTful API 的設計原則
+app.use(methodOverride('_method'))
 
 // 設定 body-parser
 app.use(express.urlencoded({ extended: true }))
@@ -80,7 +84,7 @@ app.get('/todos/:id/edit', (req, res) => {
 })
 
 // 送出編輯 todo 請求
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   // 解構賦值：直接將物件中的多個屬性抓出來存成變數
   const { name, isDone } = req.body
@@ -96,7 +100,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 // 送出刪除 todo 請求
-app.post('/todos/:id/delete', (req,res) => {
+app.delete('/todos/:id', (req,res) => {
   const id = req.params.id
 
   return Todo.findById(id)
